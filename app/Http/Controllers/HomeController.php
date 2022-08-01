@@ -26,7 +26,7 @@ class HomeController extends Controller
     public function index()
     {
        $videos = Video::all();
-        return view('beranda.beranda', compact('video'));
+        return view('beranda.beranda', compact('videos'));
     }
 
    

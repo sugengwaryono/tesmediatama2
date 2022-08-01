@@ -85,7 +85,7 @@ $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
 				<?php foreach($videos as $key => $value): ?>
 				<tr>
 					<td><?php echo e($key+1); ?></td>
-					<td><?php echo e($value->title_video); ?></td>
+					<td><?php echo e($value->name); ?></td>
           <td><?php echo e($value->url); ?></td>
           
           

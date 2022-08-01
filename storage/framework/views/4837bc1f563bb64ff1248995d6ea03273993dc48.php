@@ -1,16 +1,14 @@
-@extends('layouts.app-dash-lte')
+<?php $__env->startSection('meta'); ?>
+<meta name="_token" content="<?php echo e(csrf_token()); ?>"/>
+<?php $__env->stopSection(); ?>
 
-@section('meta')
-<meta name="_token" content="{{{ csrf_token() }}}"/>
-@endsection
+<?php $__env->startSection('styles'); ?>
+<link rel="stylesheet" href="<?php echo asset('template/plugins/datatables/dataTables.bootstrap.css'); ?>">
+<?php $__env->stopSection(); ?>
 
-@section('styles')
-<link rel="stylesheet" href="{!! asset('template/plugins/datatables/dataTables.bootstrap.css') !!}">
-@endsection
-
-@section('scripts')
-<script src="{!! asset('template/plugins/datatables/jquery.dataTables.min.js') !!}"></script>
-<script src="{!! asset('template/plugins/datatables/dataTables.bootstrap.min.js') !!}"></script>
+<?php $__env->startSection('scripts'); ?>
+<script src="<?php echo asset('template/plugins/datatables/jquery.dataTables.min.js'); ?>"></script>
+<script src="<?php echo asset('template/plugins/datatables/dataTables.bootstrap.min.js'); ?>"></script>
 <script type="text/javascript">
 $(function () {
     $.ajaxSetup({
@@ -26,11 +24,11 @@ $(document).ready(function() {
 <script type="text/javascript">
 //modal info
 $(document).on("click", ".open-InfoProfile", function () {
-  var video_id = $(this).data('id');
+  var user_id = $(this).data('id');
   $.ajax({
     type: 'POST',
-    url: '/api/video',
-    data: { id: video_id },
+    url: '/api/user',
+    data: { id: user_id },
     success: function (data) {
                 $('#respon').html(data);
               }
@@ -53,21 +51,21 @@ $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
     $(this).data('form').submit();
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content-header', 'Video')
+<?php $__env->startSection('content-header', 'Pengguna'); ?>
 
-@section('breadcump')
+<?php $__env->startSection('breadcump'); ?>
 <li>Dashboard</li>
-<li class="active">Video</li>
-@endsection
+<li class="active">Member</li>
+<?php $__env->stopSection(); ?>
 
-@section('content')
-@include('widgets.message')
+<?php $__env->startSection('content'); ?>
+<?php echo $__env->make('widgets.message', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
 <div class="box">
 	<div class="box-header">
 		<h3 class="box-title">
-		<a href="/dashboard/videos/create" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Video</a>
+		<a href="/dashboard/users/create" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Member</a>
 		</h3>
 	</div>
 	<!-- /.box-header -->
@@ -76,27 +74,31 @@ $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
 			<thead>
 				<tr>
 					<th>NO#</th>
-					<th>Judul</th>
-          <th>Url</th>
-          
+					<th>Nama</th>
+          <th>Email</th>
+          <th>username</th>
+          <th>Phone</th>
           
 					<th>Aksi</th>
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($videos as $key => $value)
+				<?php foreach($users as $key => $value): ?>
 				<tr>
-					<td>{{ $key+1 }}</td>
-					<td>{{ $value->name }}</td>
-          <td>{{ $value->url }}</td>
-          
+					<td><?php echo e($key+1); ?></td>
+					<td><?php echo e($value->name); ?></td>
+          <td><?php echo e($value->email); ?></td>
+          <td><?php echo e($value->username); ?></td>
+          <td><?php echo e($value->phone); ?></td>
           
           <td>
-			            {!! Form::open(['route' => ['dashboard.videos.destroy', $value->id], 'method' => 'delete']) !!}
-                  <a type="button" data-placement="left" title="Lihat" class="open-InfoProfile btn btn-xs btn-warning" data-toggle="modal" data-id="{{$value->id}}" href="#myModal"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span></a>
-			            <a href="{!! route('dashboard.videos.edit', $value->id) !!}" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>
+			            <?php echo Form::open(['route' => ['dashboard.users.destroy', $value->id], 'method' => 'delete']); ?>
+
+                  <a type="button" data-placement="left" title="Lihat" class="open-InfoProfile btn btn-xs btn-warning" data-toggle="modal" data-id="<?php echo e($value->id); ?>" href="#myModal"><span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span></a>
+			            <a href="<?php echo route('dashboard.users.edit', $value->id); ?>" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i></a>
 			            <button data-toggle="modal" data-target="#confirmDelete" data-placement="left" title="Hapus" class="btn btn-xs btn-danger" type="button"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></button>
-			            {!! Form::close() !!}
+			            <?php echo Form::close(); ?>
+
 					</td>
 				</tr>
 
@@ -120,7 +122,7 @@ $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
         </div>
         <!-- end modal delete -->
 
-				@endforeach
+				<?php endforeach; ?>
 			</tbody>
 		</table>
 	</div>
@@ -132,7 +134,7 @@ $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          <h4 class="modal-title" id="myModalLabel">Detail Video</h4>
+          <h4 class="modal-title" id="myModalLabel">Detail Member</h4>
         </div>
         <div class="modal-body">
           <div id="respon"></div>
@@ -144,4 +146,6 @@ $('#confirmDelete').find('.modal-footer #confirm').on('click', function(){
     </div>
   </div>
 <!-- end modal -->
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app-dash-lte', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
